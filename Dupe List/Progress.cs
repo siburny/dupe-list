@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Collections;
 
 namespace DupeList
 {
@@ -34,7 +35,7 @@ namespace DupeList
             ds.OnFinishedProcessing += new DuplicateScanner.SwitchWindowHandler(ds_OnFinishedProcessing);
         }
 
-        void ds_OnFinishedProcessing(List<List<string>> duplicateData)
+        void ds_OnFinishedProcessing(Hashtable duplicateData)
         {
             if (InvokeRequired)
             {
@@ -49,7 +50,7 @@ namespace DupeList
             }
         }
 
-        void _switchWindow(List<List<string>> duplicateData)
+        void _switchWindow(Hashtable duplicateData)
         {
             ResultWindow r = new ResultWindow(duplicateData);
             r.Show();

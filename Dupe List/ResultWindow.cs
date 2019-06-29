@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
+using System.Collections;
 
 namespace DupeList
 {
@@ -15,7 +16,7 @@ namespace DupeList
     {
         ContextMenu cm = new ContextMenu();
 
-        public ResultWindow(List<List<string>> duplicateResults)
+        public ResultWindow(Hashtable duplicateResults)
         {
             InitializeComponent();
 
@@ -95,7 +96,7 @@ namespace DupeList
             }
         }
 
-        private void BeginProcessing(List<List<string>> duplicateResults)
+        private void BeginProcessing(Hashtable duplicateResults)
         {
             DoInvoke((MethodInvoker)delegate()
             {
@@ -103,12 +104,9 @@ namespace DupeList
             });
 
             int max = 0;
-            foreach (List<string> ss in duplicateResults)
+            foreach (DictionaryEntry ss in duplicateResults)
             {
-                foreach (string s in ss)
-                {
-                    max++;
-                }
+                max += ((List<string>)ss.Value).Count;
             }
 
             ProcessProgress progress = new ProcessProgress(max, "Processing");
@@ -120,21 +118,21 @@ namespace DupeList
             int count = 0;
             int total = 0;
 
-            foreach (List<string> dupeGroup in duplicateResults)
+            foreach (DictionaryEntry dupeGroup in duplicateResults)
             {
-                FileInfo f = new FileInfo(dupeGroup[0]);
+                List<string> dupeGroupFiles = (List<string>)dupeGroup.Value;
 
-                string headerKey = Hasher.md5(Encoding.ASCII.GetBytes(f.FullName));
+                string headerKey = "Hasg: " + dupeGroup.Key.ToString() + ", Size: " + new FileInfo(dupeGroupFiles[0]).Length.ToString();
 
-                DoInvoke((MethodInvoker)delegate()
+                DoInvoke((MethodInvoker)delegate ()
                 {
-                    duplicateList.Groups.Add(headerKey, f.Name);
+                    duplicateList.Groups.Add(headerKey, headerKey);
                 });
 
-                foreach (string file in dupeGroup)
+                foreach (string file in dupeGroupFiles)
                 {
                     ListViewItem i = new ListViewItem(duplicateList.Groups[headerKey]);
-                    i.Text = new FileInfo(file).FullName;
+                    i.Text = file;
 
                     DoInvoke((MethodInvoker)delegate()
                     {

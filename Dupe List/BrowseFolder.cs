@@ -46,5 +46,26 @@ namespace DupeList
         {
             Environment.Exit(0);
         }
+
+        private void tPath_Enter(object sender, EventArgs e)
+        {
+            if (tPath.Text == "No folder selected.")
+            {
+                tPath.Text = "";
+            }
+        }
+
+        private void tPath_Leave(object sender, EventArgs e)
+        {
+            if (tPath.Text == "")
+            {
+                tPath.Text = "No folder selected.";
+            }
+        }
+
+        private void tPath_TextChanged(object sender, EventArgs e)
+        {
+            tPath.ForeColor = tPath.Text == "No folder selected." ? SystemColors.GrayText : SystemColors.ControlText;
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
+using System.IO;
 
 namespace DupeList
 {
@@ -10,9 +11,12 @@ namespace DupeList
     {
         static MD5 md = MD5.Create();
 
-        public static string md5(byte[] contents)
+        public static string Md5(string filename)
         {
-            return bytesToHex(md.ComputeHash(contents));
+            using (var stream = File.OpenRead(filename))
+            {
+                return bytesToHex(md.ComputeHash(stream));
+            }
         }
 
         private static string bytesToHex(byte[] bytes)

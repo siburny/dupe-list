@@ -25,7 +25,7 @@ namespace DupeList
         string Location;
         public delegate void UpdateUIDelegate(UIDataPackage info);
 
-        public delegate void SwitchWindowHandler(List<List<string>> duplicateData);
+        public delegate void SwitchWindowHandler(Hashtable duplicateData);
         public event SwitchWindowHandler OnFinishedProcessing;
 
         UpdateUIDelegate updateUI;
@@ -80,19 +80,17 @@ namespace DupeList
             uiData.CurrentAction = ScanAction.ScanComplete;
             updateUI(uiData);
 
-            List<List<string>> dupes = new List<List<string>>();
-
             foreach (DictionaryEntry kv in result)
             {
-                if (((List<string>)kv.Value).Count > 1)
+                if (((List<string>)kv.Value).Count == 1)
                 {
-                    dupes.Add((List<string>)kv.Value);
+                    result.Remove(kv.Key);
                 }
             }
 
             if (OnFinishedProcessing != null)
             {
-                OnFinishedProcessing(dupes);
+                OnFinishedProcessing(result);
             }
         }
 
@@ -105,7 +103,8 @@ namespace DupeList
                 {
                     try
                     {
-                        string hash = Hasher.md5(File.ReadAllBytes(file.FullName));
+                        string hash = Hasher.Md5(file.FullName);
+
                         if (existing.ContainsKey(hash))
                         {
                             ((List<string>)existing[hash]).Add(file.FullName);

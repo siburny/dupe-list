@@ -1,6 +1,5 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2017
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dupe List", "Dupe List\Dupe List.csproj", "{B1C8B9D8-89FB-48C7-AE5B-B74BD6CEF65B}"
 EndProject
 Global
