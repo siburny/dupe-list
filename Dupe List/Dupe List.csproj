@@ -18,7 +18,7 @@
     <ManifestCertificateThumbprint>60D8D0AE1C75E2B99EB8D0F0A76522DCC0C6DC3E</ManifestCertificateThumbprint>
     <ManifestKeyFile>Dupe List_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <ApplicationIcon>Resources\copy.ico</ApplicationIcon>
     <FileUpgradeFlags>
