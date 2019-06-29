@@ -66,6 +66,8 @@ namespace DupeList
         private void tPath_TextChanged(object sender, EventArgs e)
         {
             tPath.ForeColor = tPath.Text == "No folder selected." ? SystemColors.GrayText : SystemColors.ControlText;
+            bScan.Enabled = tPath.Text != "No folder selected." && tPath.Text != "";
+            FolderLoc = tPath.Text;
         }
     }
 }

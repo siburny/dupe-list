@@ -15,7 +15,7 @@ namespace DupeList
 
         static string[] LOWER_PRIORITY_FILES = new string[]
         {
-            "(", ")", "copy of", "- copy"
+            "(", ")", "copy of", "- copy", "!"
         };
 
         public static bool IsExcludedFile(string file)

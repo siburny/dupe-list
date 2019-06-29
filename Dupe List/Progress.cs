@@ -100,7 +100,10 @@ namespace DupeList
 
         private void bCancel_Click(object sender, EventArgs e)
         {
-            Environment.Exit(0);
+            if(ds != null)
+            {
+                ds.AbortScanning();
+            }
         }
 
         

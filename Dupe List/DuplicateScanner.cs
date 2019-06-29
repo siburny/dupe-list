@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Security.AccessControl;
 using System.Collections;
 using System.Security.Cryptography;
+using System.Windows;
 
 namespace DupeList
 {
@@ -31,7 +32,7 @@ namespace DupeList
         UpdateUIDelegate updateUI;
         UIDataPackage uiData;
         Thread scannerThread;
-
+        bool abortScanningFlag = false;
         
 
         public DuplicateScanner(string Folder, UpdateUIDelegate UIUpdateMethod)
@@ -48,6 +49,11 @@ namespace DupeList
             scannerThread.Start();
 
             Trace.WriteLine("Thread started. Waiting...");
+        }
+
+        public void AbortScanning()
+        {
+            abortScanningFlag = true;
         }
 
         private void ScanForDuplicates(string loc)
@@ -75,16 +81,17 @@ namespace DupeList
             updateUI(uiData);
 
             Hashtable result = new Hashtable();
-            GetFileHashtable(filesToScan, ref result);
+            GetFileHashtable(filesToScan, ref result, ref abortScanningFlag);
 
             uiData.CurrentAction = ScanAction.ScanComplete;
             updateUI(uiData);
 
-            foreach (DictionaryEntry kv in result)
+            ArrayList keys = new ArrayList(result.Keys);
+            foreach (var index in keys)
             {
-                if (((List<string>)kv.Value).Count == 1)
+                if (((List<string>)result[index]).Count == 1)
                 {
-                    result.Remove(kv.Key);
+                    result.Remove(index);
                 }
             }
 
@@ -94,7 +101,7 @@ namespace DupeList
             }
         }
 
-        private void GetFileHashtable(List<string> fileList, ref Hashtable existing)
+        private void GetFileHashtable(List<string> fileList, ref Hashtable existing, ref bool AbortScanning)
         {
             foreach (string filename in fileList)
             {
@@ -126,6 +133,11 @@ namespace DupeList
                 }
                 uiData.CompletedFiles++;
                 updateUI(uiData);
+
+                if (AbortScanning)
+                {
+                    return;
+                }
             }
         }
 
